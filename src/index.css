@@ -186,6 +186,30 @@
     color: var(--accent);
   }
 
+  .form-input {
+    @apply w-full rounded-lg px-4 py-3 text-sm outline-none transition-all duration-200;
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    color: #fff;
+    font-family: var(--font-body);
+    min-height: 48px;
+  }
+  .form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(62,232,160,0.1);
+  }
+  .form-input::placeholder {
+    color: var(--muted-color);
+    opacity: 0.6;
+  }
+  select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%237a8095' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25em;
+  }
+
   .mesh-gradient {
     position: absolute;
     inset: 0;
