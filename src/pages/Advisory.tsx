@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import PillarCard from '@/components/cards/PillarCard';
 import PageHeader from '@/components/shared/PageHeader';
 
-const DNA_IMG = 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=1920&q=80&auto=format&fit=crop';
+const DNA_IMG = '/images/dna-helix.jpg';
 
 export default function Advisory() {
   return (

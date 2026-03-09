@@ -1,20 +1,19 @@
-import { useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import Home from '@/pages/Home';
-import Advisory from '@/pages/Advisory';
-import Services from '@/pages/Services';
-import Markets from '@/pages/Markets';
-import Join from '@/pages/Join';
-import Careers from '@/pages/Careers';
-import Contact from '@/pages/Contact';
-import NotFound from '@/pages/NotFound';
 
-const queryClient = new QueryClient();
+// Lazy-loaded pages for code splitting
+const Home = lazy(() => import('@/pages/Home'));
+const Advisory = lazy(() => import('@/pages/Advisory'));
+const Services = lazy(() => import('@/pages/Services'));
+const Markets = lazy(() => import('@/pages/Markets'));
+const Join = lazy(() => import('@/pages/Join'));
+const Careers = lazy(() => import('@/pages/Careers'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -22,20 +21,30 @@ function ScrollToTop() {
   return null;
 }
 
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+      <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
+    </div>
+  );
+}
+
 function AppRoutes() {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Home />} />
-        <Route path="/advisory" element={<Advisory />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/markets" element={<Markets />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/advisory" element={<Advisory />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/markets" element={<Markets />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   );
 }
@@ -60,25 +69,23 @@ function LenisProvider({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <LenisProvider>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-md focus:text-sm"
-          style={{ background: 'var(--accent)', color: 'var(--bg)' }}
-        >
-          Skip to content
-        </a>
-        <ScrollToTop />
-        <Navbar />
-        <main id="main-content">
-          <AppRoutes />
-        </main>
-        <Footer />
-      </LenisProvider>
-    </BrowserRouter>
-  </QueryClientProvider>
+  <BrowserRouter>
+    <LenisProvider>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-md focus:text-sm"
+        style={{ background: 'var(--accent)', color: 'var(--bg)' }}
+      >
+        Skip to content
+      </a>
+      <ScrollToTop />
+      <Navbar />
+      <main id="main-content">
+        <AppRoutes />
+      </main>
+      <Footer />
+    </LenisProvider>
+  </BrowserRouter>
 );
 
 export default App;

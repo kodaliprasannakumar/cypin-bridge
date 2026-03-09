@@ -7,6 +7,7 @@ import { Clock, Shield, MessageCircle } from 'lucide-react';
 import KineticTitle from '@/components/motion/KineticTitle';
 import SectionEyebrow from '@/components/shared/SectionEyebrow';
 import SuccessState from '@/components/shared/SuccessState';
+import { scrollToFirstError, submitForm } from '@/lib/form-utils';
 
 function FormField({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
@@ -55,7 +56,7 @@ function ManufacturerForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(() => setSubmitted(true))} className="space-y-5" noValidate>
+    <form onSubmit={handleSubmit(async (data) => { await submitForm(data, 'New Manufacturer Application — Cypin Bridge'); setSubmitted(true); }, scrollToFirstError)} className="space-y-5" noValidate>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <FormField label="Company Name" error={errors.companyName?.message}>
           <input {...register('companyName')} className="form-input" placeholder="e.g., Roche Diagnostics" aria-invalid={!!errors.companyName} />
@@ -155,7 +156,7 @@ function DistributorForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(() => setSubmitted(true))} className="space-y-5" noValidate>
+    <form onSubmit={handleSubmit(async (data) => { await submitForm(data, 'New Distributor Application — Cypin Bridge'); setSubmitted(true); }, scrollToFirstError)} className="space-y-5" noValidate>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <FormField label="Company Name" error={errors.companyName?.message}>
           <input {...register('companyName')} className="form-input" placeholder="e.g., BioScience India Pvt. Ltd." aria-invalid={!!errors.companyName} />

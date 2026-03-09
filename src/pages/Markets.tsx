@@ -3,7 +3,7 @@ import AnimatedStat from '@/components/motion/AnimatedStat';
 import VerticalCard from '@/components/cards/VerticalCard';
 import PageHeader from '@/components/shared/PageHeader';
 
-const INDIA_IMG = 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1920&q=80&auto=format&fit=crop';
+const INDIA_IMG = '/images/india-cityscape.jpg';
 
 export default function Markets() {
   return (

@@ -353,11 +353,125 @@ STATUS: done
 
 ---
 
+### Phase 5 (Round 2): External Review — Critical Fixes
+
+[EVT-033] 2026-03-09T01:00
+FILE: src/components/ui/* (49 files), src/hooks/use-mobile.tsx
+ACTION: deleted
+CHANGE: Removed all 49 unused shadcn/ui component files (accordion, alert, badge, button, calendar, card, carousel, chart, checkbox, collapsible, command, context-menu, dialog, drawer, dropdown-menu, form, hover-card, input, input-otp, label, menubar, navigation-menu, pagination, popover, progress, radio-group, resizable, scroll-area, select, separator, sheet, sidebar, skeleton, slider, sonner, switch, table, tabs, textarea, toast, toaster, toggle, toggle-group, tooltip, use-toast) and the unused `use-mobile.tsx` hook.
+RATIONALE: External review identified 487KB JS bundle as "bloated". Investigation revealed bulk-installed shadcn/ui components — none were imported by any application code. Each file pulled in Radix UI primitives at build time even though tree-shaking should have removed them, the sheer number of files slowed the build and added noise to the codebase.
+PRD REF: 9.1
+STATUS: done
+
+---
+
+[EVT-034] 2026-03-09T01:01
+FILE: package.json
+ACTION: modified
+CHANGE: Removed ~30 unused production dependencies: all 23 @radix-ui/* packages (except react-slot), cmdk, date-fns, embla-carousel-react, input-otp, next-themes, react-day-picker, react-resizable-panels, recharts, sonner, vaul, @tanstack/react-query, lovable-tagger. Kept only 14 packages actually used by the application.
+RATIONALE: Every unused dependency is a supply chain risk and bundle weight. `@tanstack/react-query` was imported in App.tsx but no component used queries. `lovable-tagger` was a Lovable.dev editor plugin. The others were shadcn/ui transitive deps.
+PRD REF: 9.1
+STATUS: done
+
+---
+
+[EVT-035] 2026-03-09T01:02
+FILE: vite.config.ts
+ACTION: modified
+CHANGE: Removed `lovable-tagger` import and `componentTagger()` plugin call. Simplified config to remove unused `mode` parameter.
+RATIONALE: Build crashed after dependency purge because vite.config.ts still imported the removed `lovable-tagger` package. Must clean both sides of a dependency removal.
+PRD REF: 9.1
+STATUS: done
+
+---
+
+[EVT-036] 2026-03-09T01:03
+FILE: src/App.tsx
+ACTION: modified
+CHANGE: (a) Removed `@tanstack/react-query` import and `QueryClientProvider` wrapper. (b) Removed `QueryClient` instantiation. (c) Added `React.lazy()` code splitting for all 8 page components. (d) Added `<Suspense fallback={<PageLoader />}>` wrapper around Routes. (e) Created `PageLoader` component (centered spinner).
+RATIONALE: (a-b) No component uses react-query — the provider was dead code wrapping the entire app. (c-d) External review flagged lack of code splitting. Lazy loading pages means the initial bundle only includes the shared framework; each page loads on navigation. This is the standard React SPA optimization. (e) Users see a branded spinner during chunk loads instead of a blank screen.
+PRD REF: 9.1, 9.3
+STATUS: done
+
+---
+
+[EVT-037] 2026-03-09T01:04
+FILE: public/images/ (6 files)
+ACTION: created
+CHANGE: Downloaded 6 images from Unsplash to local `public/images/`: hero-lab.jpg (764KB), mission-scientist.jpg (88KB), dna-helix.jpg (508KB), lab-equipment.jpg (515KB), india-cityscape.jpg (1.0MB), pharma-facility.jpg (206KB).
+RATIONALE: External review flagged hotlinking to Unsplash CDN as a production risk — "CDN can change URLs, rate-limit, or go down." Local images ensure the site works offline/independently. All images are Unsplash-licensed (free for commercial use).
+PRD REF: 3.1
+STATUS: done
+
+---
+
+[EVT-038] 2026-03-09T01:05
+FILE: src/pages/Home.tsx
+ACTION: modified
+CHANGE: (a) Hero section height `160vh` → `100vh` (viewport-height static). (b) Removed `useRef`, `useScroll`, `useTransform` imports — hero is no longer parallax/sticky. (c) Updated all image URLs from Unsplash CDN to local `/images/*.jpg` paths.
+RATIONALE: (a) External review: "160vh hero = 60vh of dead scroll space." 100vh hero fills exactly one screen — scroll immediately reveals content. (b) Parallax was the source of the excessive height; static hero needs no scroll transforms. (c) Image localization per EVT-037.
+PRD REF: 3.2, 3.1
+STATUS: done
+
+---
+
+[EVT-039] 2026-03-09T01:06
+FILE: src/pages/Advisory.tsx, Services.tsx, Markets.tsx, Careers.tsx
+ACTION: modified
+CHANGE: Updated all image URLs from Unsplash CDN to local `/images/*.jpg` paths in PageHeader components.
+RATIONALE: Image localization per EVT-037. All pages now reference self-hosted images.
+PRD REF: 3.1
+STATUS: done
+
+---
+
+[EVT-040] 2026-03-09T01:07
+FILE: src/lib/form-utils.ts
+ACTION: created
+CHANGE: New utility file with two functions: (a) `scrollToFirstError()` — queries `[aria-invalid="true"]`, scrolls smoothly into view, focuses the element. Uses `requestAnimationFrame` to run after DOM update. (b) `submitForm(data, subject)` — Web3Forms API integration with dev-mode bypass (logs to console when no real key configured).
+RATIONALE: (a) External review: "validation errors appear below the fold on long forms — user doesn't know form failed." Scroll-to-error solves this. (b) Forms previously called `setSubmitted(true)` with no backend integration. The dev-mode bypass lets the app work without a key during development while being production-ready when the key is configured.
+PRD REF: 6.5, 6.6
+STATUS: done
+
+---
+
+[EVT-041] 2026-03-09T01:08
+FILE: src/pages/NotFound.tsx
+ACTION: modified
+CHANGE: Redesigned with large gradient "404" text (8rem mobile, 12rem desktop), proper heading, descriptive paragraph, and two CTA buttons (Back to Home, Contact Us). Added Framer Motion page transition.
+RATIONALE: External review: "NotFound page is bare." A professional 404 page reduces bounce rate by offering clear navigation paths. The gradient text matches the brand's visual language.
+PRD REF: 5.6
+STATUS: done
+
+---
+
+[EVT-042] 2026-03-09T01:09
+FILE: src/pages/Join.tsx, Contact.tsx, Careers.tsx
+ACTION: modified
+CHANGE: Wired `scrollToFirstError` as the `onInvalid` callback in all 4 form `handleSubmit()` calls (manufacturer, distributor, contact, career). Wired `submitForm()` as the `onValid` handler with form-specific email subjects.
+RATIONALE: Completes the form UX loop: validation errors scroll into view, valid submissions go to Web3Forms (or dev console). All 4 forms now have production-ready submit handling.
+PRD REF: 6.5, 6.6
+STATUS: done
+
+---
+
+### Build Verification — Round 2
+
+[EVT-043] 2026-03-09T01:10
+FILE: (build output)
+ACTION: verified
+CHANGE: Clean install with purged package.json (341 packages, down from ~600+). `npx tsc --noEmit` — zero errors. `npx vite build` — successful in 1.69s. Code-split output: main bundle `index.js` 321.82 KB (104.43 KB gzip), plus 14 lazy-loaded page/component chunks. Total gzipped JS: 150.5 KB.
+RATIONALE: Validates the entire Round 2 changes: dependency purge, code splitting, form wiring, image localization, and config cleanup all work together without breaking the build.
+PRD REF: 9.1
+STATUS: done
+
+---
+
 ## Decisions Log
 
 | # | Decision | Rationale | Alternative Considered |
 |---|----------|-----------|----------------------|
-| 1 | Used Unsplash CDN URLs directly instead of downloading images to `public/images/` | Avoids build-time dependency and repo bloat. Unsplash TOS allows hotlinking. Images served from Unsplash's global CDN (Imgix) with automatic WebP/AVIF negotiation. | Download to `public/` — better for self-hosting but adds ~10MB to repo and requires manual optimization pipeline. |
+| 1 | ~~Used Unsplash CDN URLs directly~~ → **Superseded in Round 2**: Downloaded images to `public/images/` for self-hosting reliability. | External review correctly flagged CDN hotlinking as a production risk. Local images are now the standard. | Keep CDN URLs — rejected due to availability risk. |
 | 2 | Text-based trust "logos" instead of real logos | Client doesn't have partner permission yet. Text logos are structured placeholders that communicate intent. Names chosen (AIIMS, ICMR, CDSCO, DBT) are real Indian biotech ecosystem anchors. | Skip trust section — but B2B conversion research shows trust signals increase form submission by 20-40%. |
 | 3 | CSS `display` toggle for Join form tabs instead of state management library | Simplest solution preserving React Hook Form's internal ref-based state. RHF doesn't support controlled mode well — lifting state would require restructuring all validation. | React context or Zustand — overengineered for visibility toggle. |
 | 4 | KineticTitle `variant` prop instead of separate Hero/Section components | Single component with variants is more maintainable. Both share the same animation logic with different parameters. | Separate `HeroTitle` + `SectionTitle` — adds a component, splits animation logic across files. |
@@ -369,26 +483,35 @@ STATUS: done
 
 ## Files Changed Summary
 
-### Created (6 files)
+### Created (8 files)
 - `src/hooks/use-reduced-motion.ts`
 - `src/components/shared/SuccessState.tsx`
 - `src/components/shared/TrustBar.tsx`
 - `src/components/shared/PageHeader.tsx`
 - `src/components/shared/Testimonial.tsx`
+- `src/lib/form-utils.ts` — scroll-to-first-error + Web3Forms submit utility
+- `public/images/*.jpg` (6 localized images)
 - `OVERHAUL-LOG.md` (this file)
 
-### Modified (20 files)
+### Deleted (50 files)
+- `src/components/ui/*` (49 unused shadcn/ui components)
+- `src/hooks/use-mobile.tsx` (unused)
+
+### Modified (22 files)
 - `index.html` — SEO meta, font preconnect
 - `src/index.css` — typography, colors, eyebrow, reduced-motion, form states, checkbox, trust bar, page header
 - `tailwind.config.ts` — color token sync
-- `src/App.tsx` — skip-to-content, main landmark, Lenis reduced-motion
-- `src/pages/Home.tsx` — hero rewrite, imagery, trust bar, testimonial, divider, accessibility
-- `src/pages/Advisory.tsx` — PageHeader, font weights, container width
-- `src/pages/Services.tsx` — PageHeader, container width
-- `src/pages/Markets.tsx` — PageHeader, container width
-- `src/pages/Join.tsx` — 2-col layout, tab persistence, placeholders, checkboxes, sidebar, success states
-- `src/pages/Contact.tsx` — mesh bg, placeholders, aria, success state, confidentiality card
-- `src/pages/Careers.tsx` — PageHeader, placeholders, aria, success state, code cleanup
+- `vite.config.ts` — removed lovable-tagger plugin
+- `package.json` — purged ~30 unused dependencies
+- `src/App.tsx` — skip-to-content, main landmark, Lenis reduced-motion, code splitting, removed react-query
+- `src/pages/Home.tsx` — hero 100vh static, local imagery, trust bar, testimonial, divider, accessibility
+- `src/pages/Advisory.tsx` — PageHeader, font weights, container width, local images
+- `src/pages/Services.tsx` — PageHeader, container width, local images
+- `src/pages/Markets.tsx` — PageHeader, container width, local images
+- `src/pages/Join.tsx` — 2-col layout, tab persistence, placeholders, checkboxes, sidebar, success states, form wiring
+- `src/pages/Contact.tsx` — mesh bg, placeholders, aria, success state, confidentiality card, form wiring
+- `src/pages/Careers.tsx` — PageHeader, placeholders, aria, success state, form wiring
+- `src/pages/NotFound.tsx` — redesigned with gradient 404, CTAs
 - `src/components/motion/ParticleField.tsx` — count reduction, reduced-motion
 - `src/components/motion/KineticTitle.tsx` — variant system, animation control, reduced-motion
 - `src/components/motion/AnimatedStat.tsx` — reduced-motion
@@ -399,3 +522,12 @@ STATUS: done
 - `src/components/cards/VerticalCard.tsx` — font weight, hover removal
 - `src/components/layout/Navbar.tsx` — backdrop, scroll lock, brand weight, aria
 - `src/components/layout/Footer.tsx` — dynamic year, trust strip, location, font weights
+
+### Bundle Size Impact
+| Metric | Before | After | Change |
+|--------|--------|-------|--------|
+| JS (raw) | 487 KB | 454 KB | -7% |
+| JS (gzip) | ~180 KB | 150.5 KB | -16% |
+| Initial load (gzip) | ~180 KB | 110 KB (index + CSS) | -39% |
+| npm packages | ~600+ | 341 | -43% |
+| Build time | 2.18s | 1.69s | -22% |

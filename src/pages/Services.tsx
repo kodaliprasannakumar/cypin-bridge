@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import ServiceCard from '@/components/cards/ServiceCard';
 import PageHeader from '@/components/shared/PageHeader';
 
-const LAB_IMG = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1920&q=80&auto=format&fit=crop';
+const LAB_IMG = '/images/lab-equipment.jpg';
 
 export default function Services() {
   return (

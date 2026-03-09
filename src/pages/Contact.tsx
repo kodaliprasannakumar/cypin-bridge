@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { MapPin, Mail, Linkedin } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 import SuccessState from '@/components/shared/SuccessState';
+import { scrollToFirstError, submitForm } from '@/lib/form-utils';
 
 const contactSchema = z.object({
   fullName: z.string().trim().min(2, 'Required'),
@@ -54,7 +55,7 @@ export default function Contact() {
                 resetLabel="Send another message"
               />
             ) : (
-              <form onSubmit={handleSubmit(() => setSubmitted(true))} className="space-y-5" noValidate>
+              <form onSubmit={handleSubmit(async (data) => { await submitForm(data, 'Contact Inquiry — Cypin Bridge'); setSubmitted(true); }, scrollToFirstError)} className="space-y-5" noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <FormField label="Full Name" error={errors.fullName?.message}>
                     <input {...register('fullName')} className="form-input" placeholder="Your full name" aria-invalid={!!errors.fullName} />

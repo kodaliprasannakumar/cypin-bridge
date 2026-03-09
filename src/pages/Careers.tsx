@@ -5,8 +5,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import PageHeader from '@/components/shared/PageHeader';
 import SuccessState from '@/components/shared/SuccessState';
+import { scrollToFirstError, submitForm } from '@/lib/form-utils';
 
-const PHARMA_IMG = 'https://images.unsplash.com/photo-1581093458791-9d42e3c2fd56?w=1920&q=80&auto=format&fit=crop';
+const PHARMA_IMG = '/images/pharma-facility.jpg';
 
 const roles = [
   { title: 'Scientific Advisor', desc: 'Provide strategic scientific guidance to international biotech manufacturers entering the Indian market.' },
@@ -54,7 +55,7 @@ function CareerFormInline() {
   }
 
   return (
-    <form onSubmit={handleSubmit(() => setSubmitted(true))} className="space-y-5" noValidate>
+    <form onSubmit={handleSubmit(async (data) => { await submitForm(data, 'Career Application — Cypin Bridge'); setSubmitted(true); }, scrollToFirstError)} className="space-y-5" noValidate>
       <FormField label="Full Name" error={errors.fullName?.message}>
         <input {...register('fullName')} className="form-input" placeholder="Your full name" aria-invalid={!!errors.fullName} />
       </FormField>
