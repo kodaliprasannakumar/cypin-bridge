@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-5 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
         {/* Brand */}
         <div>
-          <div className="font-heading text-xl mb-3" style={{ color: '#fff' }}>
+          <div className="font-heading text-xl font-normal mb-3" style={{ color: '#fff' }}>
             Cypin<span style={{ color: 'var(--accent)' }}>.</span>Scientific
           </div>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-color)' }}>
@@ -26,7 +26,7 @@ export default function Footer() {
         </div>
         {/* Nav */}
         <div>
-          <h4 className="text-sm uppercase tracking-widest mb-4" style={{ color: 'var(--accent2)' }}>Navigation</h4>
+          <h4 className="text-sm uppercase tracking-widest mb-4 font-medium" style={{ color: 'var(--accent2)' }}>Navigation</h4>
           <div className="flex flex-col gap-2">
             {footerLinks.map(l => (
               <Link key={l.to} to={l.to} className="text-sm hover:text-[var(--accent)] transition-colors" style={{ color: 'var(--muted-color)' }}>
@@ -37,9 +37,9 @@ export default function Footer() {
         </div>
         {/* Contact */}
         <div>
-          <h4 className="text-sm uppercase tracking-widest mb-4" style={{ color: 'var(--accent2)' }}>Contact</h4>
+          <h4 className="text-sm uppercase tracking-widest mb-4 font-medium" style={{ color: 'var(--accent2)' }}>Contact</h4>
           <div className="flex flex-col gap-3 text-sm" style={{ color: 'var(--muted-color)' }}>
-            <div className="flex items-center gap-2"><MapPin size={14} /> India · Global</div>
+            <div className="flex items-center gap-2"><MapPin size={14} /> Hyderabad, India · Serving Global Clients</div>
             <a href="mailto:inquiry@cypinscientific.com" className="flex items-center gap-2 hover:text-[var(--accent)] transition-colors">
               <Mail size={14} /> inquiry@cypinscientific.com
             </a>
@@ -49,8 +49,19 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      {/* Trust strip */}
+      <div className="border-t border-[var(--line)] px-5 py-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-x-6 gap-y-1 text-xs uppercase tracking-widest" style={{ color: 'var(--muted-color)', opacity: 0.6 }}>
+          <span>ISO Compliant Partners</span>
+          <span>·</span>
+          <span>CDSCO Advisory Experts</span>
+          <span>·</span>
+          <span>Confidential Process</span>
+        </div>
+      </div>
+      {/* Copyright */}
       <div className="border-t border-[var(--line)] px-5 py-5 text-center text-xs" style={{ color: 'var(--muted-color)' }}>
-        © 2025 Cypin Scientific Advisory. All rights reserved. · India · Global
+        &copy; {new Date().getFullYear()} Cypin Scientific Advisory. All rights reserved. · Hyderabad, India · Global
       </div>
     </footer>
   );

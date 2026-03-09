@@ -18,12 +18,11 @@ export default function PillarCard({ number, label, children, delay = 0, accentC
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -4 }}
     >
       <div className="absolute top-4 right-6 font-heading text-7xl font-light opacity-[0.06]" style={{ color: '#fff' }}>
         {number}
       </div>
-      <h3 className="font-heading text-xl md:text-2xl font-light mb-3" style={{ color: '#fff' }}>{label}</h3>
+      <h3 className="font-heading text-xl md:text-2xl font-normal mb-3" style={{ color: '#fff' }}>{label}</h3>
       <div className="text-sm leading-relaxed" style={{ color: 'var(--muted-color)' }}>{children}</div>
     </motion.div>
   );

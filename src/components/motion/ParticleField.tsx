@@ -1,17 +1,22 @@
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 export default function ParticleField() {
+  const prefersReduced = useReducedMotion();
+
   const particles = useMemo(() =>
-    Array.from({ length: 40 }, (_, i) => ({
+    Array.from({ length: 18 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 2 + 1,
+      size: Math.random() * 2.5 + 1.5,
       delay: Math.random() * 4,
       duration: Math.random() * 3 + 4,
     })), []
   );
+
+  if (prefersReduced) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

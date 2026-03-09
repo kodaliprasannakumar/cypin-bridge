@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FlaskConical, Users, Map, Mail, Linkedin } from 'lucide-react';
+import { FlaskConical, Users, Map, Mail, Linkedin, ChevronDown } from 'lucide-react';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import ParticleField from '@/components/motion/ParticleField';
 import MarqueeStrip from '@/components/motion/MarqueeStrip';
 import KineticTitle from '@/components/motion/KineticTitle';
@@ -11,31 +12,32 @@ import PillarCard from '@/components/cards/PillarCard';
 import ServiceCard from '@/components/cards/ServiceCard';
 import VerticalCard from '@/components/cards/VerticalCard';
 import SectionEyebrow from '@/components/shared/SectionEyebrow';
+import TrustBar from '@/components/shared/TrustBar';
+import Testimonial from '@/components/shared/Testimonial';
 
 const heroWords = ['The', 'Scientific', 'Bridge', 'to', 'the', 'Indian', 'Biotech', 'Market.'];
 
+const HERO_IMG = 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=1920&q=80&auto=format&fit=crop';
+const MISSION_IMG = 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80&auto=format&fit=crop';
+
 function MissionVisual() {
   return (
-    <div className="w-full h-full flex items-center justify-center relative" style={{ background: 'var(--bg3)' }}>
-      {[120, 80, 40].map((size, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: `${size}%`,
-            height: `${size}%`,
-            border: '1px solid rgba(62,232,160,0.15)',
-          }}
-          animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
-        />
-      ))}
-      <div className="w-3 h-3 rounded-full" style={{ background: 'var(--accent)', boxShadow: '0 0 20px rgba(62,232,160,0.5)' }} />
+    <div className="w-full h-full relative rounded-lg overflow-hidden">
+      <img
+        src={MISSION_IMG}
+        alt="Scientist analyzing samples in a biotech research laboratory"
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(6,8,13,0.5) 0%, rgba(6,8,13,0.3) 100%)' }} />
+      {/* Accent glow */}
+      <div className="absolute bottom-0 left-0 right-0 h-1/3" style={{ background: 'linear-gradient(to top, var(--bg) 0%, transparent 100%)' }} />
     </div>
   );
 }
 
 export default function Home() {
+  const prefersReduced = useReducedMotion();
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -45,18 +47,37 @@ export default function Home() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
 
+  const scrollToContent = () => {
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+  };
+
   return (
     <div>
       {/* HERO */}
-      <div ref={heroRef} style={{ height: '200vh' }}>
+      <div ref={heroRef} style={{ height: '160vh' }}>
         <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
-          <motion.div className="hero-bg" style={{ scale: bgScale }} />
+          {/* Hero background image with overlay */}
+          <motion.div
+            className="absolute inset-0"
+            style={prefersReduced ? {} : { scale: bgScale }}
+          >
+            <img
+              src={HERO_IMG}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ opacity: 0.15 }}
+              loading="eager"
+              fetchPriority="high"
+            />
+            <div className="hero-bg" style={{ opacity: 0.85 }} />
+          </motion.div>
           <div className="dot-grid absolute inset-0" />
           <ParticleField />
 
           <motion.div
             className="relative z-10 max-w-4xl mx-auto px-5 text-center"
-            style={{ y: textY, opacity: textOpacity }}
+            style={prefersReduced ? {} : { y: textY, opacity: textOpacity }}
           >
             <SectionEyebrow>Scientific Advisory & Strategic Consultancy</SectionEyebrow>
             <h1 className="font-heading font-light mt-4 leading-[1.05] flex flex-wrap justify-center gap-x-[0.35em]"
@@ -66,7 +87,7 @@ export default function Home() {
                 <motion.span
                   key={i}
                   className={['Scientific', 'Bridge'].includes(word) ? 'gradient-text' : ''}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
                   style={{ color: ['Scientific', 'Bridge'].includes(word) ? undefined : '#fff' }}
@@ -78,7 +99,7 @@ export default function Home() {
             <motion.p
               className="mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed"
               style={{ color: 'var(--muted-color)' }}
-              initial={{ opacity: 0 }}
+              initial={prefersReduced ? {} : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
             >
@@ -88,28 +109,36 @@ export default function Home() {
             </motion.p>
             <motion.div
               className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-              initial={{ opacity: 0 }}
+              initial={prefersReduced ? {} : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
             >
-              <Link to="/join" className="pill-btn pill-btn-primary">Partner With Us</Link>
-              <Link to="/advisory" className="pill-btn pill-btn-outline">View Our Advisory Model →</Link>
+              <Link to="/join" className="pill-btn pill-btn-primary w-full sm:w-auto">Partner With Us</Link>
+              <Link to="/advisory" className="pill-btn pill-btn-outline w-full sm:w-auto">View Our Advisory Model →</Link>
             </motion.div>
           </motion.div>
 
-          <motion.div
-            className="absolute bottom-8 text-2xl"
+          <button
+            onClick={scrollToContent}
+            aria-label="Scroll to content"
+            className="absolute bottom-8 p-2 rounded-full transition-colors hover:bg-white/5"
             style={{ color: 'var(--accent)' }}
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
           >
-            ↓
-          </motion.div>
+            <motion.div
+              animate={prefersReduced ? {} : { y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <ChevronDown size={28} />
+            </motion.div>
+          </button>
         </div>
       </div>
 
       {/* MARQUEE */}
       <MarqueeStrip />
+
+      {/* TRUST BAR */}
+      <TrustBar />
 
       {/* VALUE BAR */}
       <section className="section-padding" style={{ background: 'var(--bg2)' }}>
@@ -129,7 +158,7 @@ export default function Home() {
               transition={{ delay: i * 0.1 }}
             >
               <item.icon size={28} style={{ color: 'var(--accent)' }} className="mb-4" />
-              <h3 className="font-heading text-lg font-light mb-2" style={{ color: '#fff' }}>{item.label}</h3>
+              <h3 className="font-heading text-lg font-normal mb-2" style={{ color: '#fff' }}>{item.label}</h3>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-color)' }}>{item.text}</p>
             </motion.div>
           ))}
@@ -163,9 +192,14 @@ export default function Home() {
         <p className="text-sm" style={{ color: 'var(--muted-color)' }}>— Cypin Scientific Advisory Committee</p>
       </StickyFeatureSection>
 
+      {/* DIVIDER */}
+      <div className="flex justify-center py-4">
+        <div className="h-px w-[60%]" style={{ background: 'linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent)' }} />
+      </div>
+
       {/* ADVISORY */}
       <section className="section-padding">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1400px] mx-auto">
           <SectionEyebrow>The Advisory Advantage</SectionEyebrow>
           <KineticTitle line1="A SCIENTIFIC COMPASS" line2="FOR THE INDIAN MARKET." className="mb-6" />
           <p className="max-w-3xl text-base leading-relaxed mb-12" style={{ color: 'var(--muted-color)' }}>
@@ -213,7 +247,7 @@ export default function Home() {
 
       {/* SERVICES */}
       <section className="section-padding" style={{ background: 'var(--bg2)' }}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1400px] mx-auto">
           <SectionEyebrow>Our Services</SectionEyebrow>
           <KineticTitle line1="PRECISION-ENGINEERED" line2="MARKET ENTRY." className="mb-6" />
           <p className="max-w-3xl text-base leading-relaxed mb-12" style={{ color: 'var(--muted-color)' }}>
@@ -266,7 +300,7 @@ export default function Home() {
 
       {/* MARKETS */}
       <section className="section-padding">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1400px] mx-auto">
           <SectionEyebrow>The India Opportunity</SectionEyebrow>
           <KineticTitle line1="A GLOBAL BIOTECH" line2="FRONTIER." className="mb-6" />
           <p className="max-w-3xl text-base leading-relaxed mb-12" style={{ color: 'var(--muted-color)' }}>
@@ -302,8 +336,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* TESTIMONIAL */}
+      <div style={{ background: 'var(--bg2)' }}>
+        <Testimonial
+          quote="Cypin's advisory committee provided the scientific credibility and regulatory insight we needed to confidently enter the Indian diagnostics market. Their technical vetting of distribution partners was unparalleled."
+          attribution="Global Diagnostics Manufacturer"
+          role="Market Entry Client"
+        />
+      </div>
+
       {/* JOIN CTA */}
-      <section className="section-padding" style={{ background: 'var(--bg2)' }}>
+      <section className="section-padding">
         <div className="max-w-7xl mx-auto">
           <SectionEyebrow>Join Our Ecosystem</SectionEyebrow>
           <KineticTitle line1="COLLABORATE WITH INDIA'S" line2="PREMIER BIOTECH ADVISORY." className="mb-6" />
@@ -317,7 +360,7 @@ export default function Home() {
               style={{ background: 'var(--bg3)' }}
               whileHover={{ y: -4 }}
             >
-              <h3 className="font-heading text-2xl font-light mb-4" style={{ color: '#fff' }}>For Global Manufacturers</h3>
+              <h3 className="font-heading text-2xl font-normal mb-4" style={{ color: '#fff' }}>For Global Manufacturers</h3>
               <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--muted-color)' }}>
                 Take the first step toward India. Submit your product specifications for a preliminary
                 Market Fit Assessment and schedule a briefing with our committee to discuss regulatory
@@ -330,7 +373,7 @@ export default function Home() {
               style={{ background: 'var(--bg3)' }}
               whileHover={{ y: -4 }}
             >
-              <h3 className="font-heading text-2xl font-light mb-4" style={{ color: '#fff' }}>For Indian Distributors</h3>
+              <h3 className="font-heading text-2xl font-normal mb-4" style={{ color: '#fff' }}>For Indian Distributors</h3>
               <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--muted-color)' }}>
                 If your organization prides itself on cold-chain integrity, specialized sales expertise,
                 and high-end service support, our committee conducts rigorous technical audits to ensure
@@ -343,7 +386,7 @@ export default function Home() {
       </section>
 
       {/* CONTACT STRIP */}
-      <section className="section-padding text-center">
+      <section className="section-padding text-center" style={{ background: 'var(--bg2)' }}>
         <div className="max-w-2xl mx-auto">
           <h2 className="font-heading text-3xl md:text-4xl font-light mb-4" style={{ color: '#fff' }}>
             Ready to Enter the Indian Market?

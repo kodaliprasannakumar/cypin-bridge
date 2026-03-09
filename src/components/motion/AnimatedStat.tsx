@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface AnimatedStatProps {
   end: number;
@@ -10,12 +11,13 @@ interface AnimatedStatProps {
 }
 
 export default function AnimatedStat({ end, prefix = '', suffix = '', decimals = 0, label }: AnimatedStatProps) {
-  const [count, setCount] = useState(0);
+  const prefersReduced = useReducedMotion();
+  const [count, setCount] = useState(prefersReduced ? end : 0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || prefersReduced) return;
     let start: number | null = null;
     const duration = 1800;
     const step = (timestamp: number) => {
@@ -26,7 +28,7 @@ export default function AnimatedStat({ end, prefix = '', suffix = '', decimals =
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-  }, [inView, end, decimals]);
+  }, [inView, end, decimals, prefersReduced]);
 
   return (
     <div ref={ref} className="p-6 md:p-8 card-hover teal-top-border" style={{ background: 'var(--bg2)' }}>

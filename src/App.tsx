@@ -42,6 +42,9 @@ function AppRoutes() {
 
 function LenisProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) return;
+
     const lenis = new Lenis({
       lerp: 0.08,
       smooth: true,
@@ -60,9 +63,16 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <LenisProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-md focus:text-sm"
+          style={{ background: 'var(--accent)', color: 'var(--bg)' }}
+        >
+          Skip to content
+        </a>
         <ScrollToTop />
         <Navbar />
-        <main>
+        <main id="main-content">
           <AppRoutes />
         </main>
         <Footer />

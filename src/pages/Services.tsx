@@ -1,19 +1,21 @@
 import { motion } from 'framer-motion';
-import KineticTitle from '@/components/motion/KineticTitle';
 import ServiceCard from '@/components/cards/ServiceCard';
-import SectionEyebrow from '@/components/shared/SectionEyebrow';
+import PageHeader from '@/components/shared/PageHeader';
+
+const LAB_IMG = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1920&q=80&auto=format&fit=crop';
 
 export default function Services() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <div className="pt-32 section-padding">
-        <div className="max-w-7xl mx-auto">
-          <SectionEyebrow>Our Services</SectionEyebrow>
-          <KineticTitle line1="PRECISION-ENGINEERED" line2="MARKET ENTRY." className="mb-8" />
-          <p className="max-w-3xl text-base leading-relaxed mb-16" style={{ color: 'var(--muted-color)' }}>
-            We provide a comprehensive suite of advisory services designed to navigate the technical,
-            regulatory, and commercial complexities of the Indian biotechnology sector.
-          </p>
+      <PageHeader
+        eyebrow="Our Services"
+        line1="PRECISION-ENGINEERED"
+        line2="MARKET ENTRY."
+        bgImageUrl={LAB_IMG}
+        description="We provide a comprehensive suite of advisory services designed to navigate the technical, regulatory, and commercial complexities of the Indian biotechnology sector."
+      />
+      <div className="section-padding pt-0">
+        <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ServiceCard number="01" tag="Matchmaking" title="Strategic Distributor Matchmaking" delay={0}
               body="We don't just find agents; we identify technical partners. Our committee conducts a multi-tier vetting process to connect you with local distributors who possess the right capabilities."

@@ -9,16 +9,16 @@
     --background: 216 33% 4%;
     --foreground: 210 20% 90%;
     --bg: #06080d;
-    --bg2: #0d1118;
-    --bg3: #111822;
+    --bg2: #0c1320;
+    --bg3: #141c2b;
     --accent: #3ee8a0;
     --accent-hsl: 155 80% 56%;
     --accent2: #6dcfff;
     --accent2-hsl: 200 100% 71%;
     --gold: #c8a96e;
     --gold-hsl: 38 45% 61%;
-    --muted-color: #7a8095;
-    --line: rgba(255,255,255,0.07);
+    --muted-color: #9ba1b5;
+    --line: rgba(255,255,255,0.10);
 
     --card: 216 28% 7%;
     --card-foreground: 210 20% 90%;
@@ -59,7 +59,7 @@
   }
   body {
     font-family: var(--font-body);
-    font-weight: 300;
+    font-weight: 400;
     background: var(--bg);
     color: var(--muted-color);
     -webkit-font-smoothing: antialiased;
@@ -158,7 +158,8 @@
 
   .eyebrow {
     font-family: var(--font-body);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--accent2);
@@ -204,10 +205,21 @@
   }
   select.form-input {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%237a8095' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ba1b5' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 1.25em;
+  }
+  .form-input[aria-invalid="true"] {
+    border-color: hsl(0, 84%, 60%);
+  }
+
+  /* Custom checkbox */
+  input[type="checkbox"].checked\:bg-\[var\(--accent\)\]:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%2306080d' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .mesh-gradient {
@@ -222,5 +234,45 @@
   @keyframes meshShift {
     0% { transform: scale(1); }
     100% { transform: scale(1.08); }
+  }
+
+  .page-header-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .trust-bar {
+    @apply flex items-center justify-center gap-8 md:gap-12 py-5 overflow-hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .trust-bar span {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.25);
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+  .trust-bar span:hover {
+    color: rgba(255,255,255,0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg,
+  .mesh-gradient { animation: none !important; }
+  .marquee-track { animation: none !important; }
+  .diagonal-card { transition: none !important; }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

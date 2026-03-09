@@ -19,7 +19,6 @@ export default function ServiceCard({ number, tag, title, body, bullets, delay =
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -4 }}
     >
       <div className="absolute top-4 right-6 font-heading text-7xl font-light opacity-[0.06]" style={{ color: '#fff' }}>
         {number}
@@ -31,7 +30,7 @@ export default function ServiceCard({ number, tag, title, body, bullets, delay =
       >
         {tag}
       </span>
-      <h3 className="font-heading text-xl md:text-2xl font-light mb-3" style={{ color: '#fff' }}>{title}</h3>
+      <h3 className="font-heading text-xl md:text-2xl font-normal mb-3" style={{ color: '#fff' }}>{title}</h3>
       <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--muted-color)' }}>{body}</p>
       <ul className="space-y-2">
         {bullets.map((b, i) => (

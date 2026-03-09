@@ -63,13 +63,13 @@ export default {
         },
         cypin: {
           bg: "#06080d",
-          bg2: "#0d1118",
-          bg3: "#111822",
+          bg2: "#0c1320",
+          bg3: "#141c2b",
           accent: "#3ee8a0",
           accent2: "#6dcfff",
           gold: "#c8a96e",
-          muted: "#7a8095",
-          line: "rgba(255,255,255,0.07)",
+          muted: "#9ba1b5",
+          line: "rgba(255,255,255,0.10)",
         },
       },
       borderRadius: {

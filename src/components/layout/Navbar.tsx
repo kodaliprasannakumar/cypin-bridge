@@ -20,6 +20,15 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); }, [location.pathname]);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
   return (
     <motion.nav
       className="fixed top-0 left-0 right-0 z-50"
@@ -34,12 +43,10 @@ export default function Navbar() {
         style={{ background: 'rgb(6,8,13)', opacity: bgOpacity }}
       />
       <div className="relative h-[68px] max-w-7xl mx-auto px-5 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="font-heading text-xl tracking-wide" style={{ color: '#fff' }}>
+        <Link to="/" className="font-heading text-xl font-normal tracking-wide" style={{ color: '#fff' }}>
           Cypin<span style={{ color: 'var(--accent)' }}>.</span>Scientific
         </Link>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map(l => (
             <Link
@@ -53,7 +60,6 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA + Hamburger */}
         <div className="flex items-center gap-4">
           <Link to="/contact" className="hidden md:inline-flex pill-btn pill-btn-primary text-sm">
             Contact Us
@@ -62,45 +68,57 @@ export default function Navbar() {
             className="md:hidden p-2"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
             {open ? <X size={24} color="#fff" /> : <Menu size={24} color="#fff" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden overflow-hidden relative"
-            style={{ background: 'var(--bg2)' }}
-          >
-            <div className="px-5 py-6 flex flex-col gap-4">
-              {navLinks.map((l, i) => (
-                <motion.div
-                  key={l.to}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <Link
-                    to={l.to}
-                    className="text-lg font-heading"
-                    style={{ color: location.pathname === l.to ? 'var(--accent)' : '#fff' }}
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 top-[68px] z-40 md:hidden"
+              style={{ background: 'rgba(0,0,0,0.6)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+            />
+            {/* Drawer */}
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="md:hidden overflow-hidden relative z-50"
+              style={{ background: 'var(--bg2)' }}
+            >
+              <div className="px-5 py-6 flex flex-col gap-4">
+                {navLinks.map((l, i) => (
+                  <motion.div
+                    key={l.to}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
                   >
-                    {l.label}
-                  </Link>
-                </motion.div>
-              ))}
-              <Link to="/contact" className="pill-btn pill-btn-primary mt-2 text-center">
-                Contact Us
-              </Link>
-            </div>
-          </motion.div>
+                    <Link
+                      to={l.to}
+                      className="text-lg font-heading font-normal"
+                      style={{ color: location.pathname === l.to ? 'var(--accent)' : '#fff' }}
+                    >
+                      {l.label}
+                    </Link>
+                  </motion.div>
+                ))}
+                <Link to="/contact" className="pill-btn pill-btn-primary mt-2 text-center">
+                  Contact Us
+                </Link>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.nav>
