@@ -7,12 +7,10 @@ import MarqueeStrip from '@/components/motion/MarqueeStrip';
 import KineticTitle from '@/components/motion/KineticTitle';
 import StickyFeatureSection from '@/components/motion/StickyFeatureSection';
 import AnimatedStat from '@/components/motion/AnimatedStat';
-import PillarCard from '@/components/cards/PillarCard';
-import ServiceCard from '@/components/cards/ServiceCard';
 import VerticalCard from '@/components/cards/VerticalCard';
 import SectionEyebrow from '@/components/shared/SectionEyebrow';
-import TrustBar from '@/components/shared/TrustBar';
 import Testimonial from '@/components/shared/Testimonial';
+import NewsroomTicker from '@/components/motion/NewsroomTicker';
 
 const heroWords = ['The', 'Scientific', 'Bridge', 'to', 'the', 'Indian', 'Biotech', 'Market.'];
 
@@ -49,11 +47,11 @@ export default function Home() {
             alt=""
             aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ opacity: 0.15 }}
+            style={{ opacity: 0.3 }}
             loading="eager"
             fetchPriority="high"
           />
-          <div className="hero-bg" style={{ opacity: 0.85 }} />
+          <div className="hero-bg" style={{ opacity: 0.7 }} />
         </div>
         <div className="dot-grid absolute inset-0" />
         <ParticleField />
@@ -118,8 +116,7 @@ export default function Home() {
         <MarqueeStrip />
       </div>
 
-      {/* TRUST BAR */}
-      <TrustBar />
+      {/* TRUST BAR removed — no actual institutional partnerships to display */}
 
       {/* VALUE BAR */}
       <section className="section-padding" style={{ background: 'var(--bg2)' }}>
@@ -138,9 +135,9 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <item.icon size={28} style={{ color: 'var(--accent)' }} className="mb-4" />
-              <h3 className="font-heading text-lg font-normal mb-2" style={{ color: '#fff' }}>{item.label}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-color)' }}>{item.text}</p>
+              <item.icon size={32} style={{ color: 'var(--accent)' }} className="mb-4" />
+              <h3 className="font-heading text-xl md:text-2xl font-normal mb-2" style={{ color: '#fff' }}>{item.label}</h3>
+              <p className="text-base leading-relaxed" style={{ color: 'var(--muted-color)' }}>{item.text}</p>
             </motion.div>
           ))}
         </div>
@@ -154,17 +151,9 @@ export default function Home() {
         eyebrow="Our Mission"
       >
         <p className="text-base leading-relaxed" style={{ color: 'var(--muted-color)' }}>
-          We serve as a high-level Scientific Advisory Committee, acting as the technical intermediary between
-          international biotechnology giants and the Indian research ecosystem. Our mission is to streamline
-          the complexities of market entry, ensuring that life-saving diagnostics and cutting-edge instruments
-          are deployed with credibility and precision.
-        </p>
-        <p className="text-base leading-relaxed" style={{ color: 'var(--muted-color)' }}>
-          The Company is established to provide specialized Scientific Advisory and Strategic Consultancy
-          services to international biotechnology and life science manufacturers. The primary business involves
-          facilitating cross-border market entry by providing high-level technical due diligence, regulatory
-          guidance, and strategic matchmaking between global technology providers and localized distribution
-          networks within India.
+          We act as the technical intermediary between international biotech manufacturers and India's research
+          ecosystem — providing scientific due diligence, regulatory guidance, and strategic matchmaking to
+          ensure your innovations reach the right laboratories with credibility and precision.
         </p>
         <blockquote className="pl-4 py-2 italic font-heading text-lg" style={{ borderLeft: '2px solid var(--accent)', color: '#fff' }}>
           "We do not merely facilitate transactions; we provide the intellectual and technical framework
@@ -178,106 +167,7 @@ export default function Home() {
         <div className="h-px w-[60%]" style={{ background: 'linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent)' }} />
       </div>
 
-      {/* ADVISORY */}
-      <section className="section-padding">
-        <div className="max-w-[1400px] mx-auto">
-          <SectionEyebrow>The Advisory Advantage</SectionEyebrow>
-          <KineticTitle line1="A SCIENTIFIC COMPASS" line2="FOR THE INDIAN MARKET." className="mb-6" />
-          <p className="max-w-3xl text-base leading-relaxed mb-12" style={{ color: 'var(--muted-color)' }}>
-            At the core of our organization is a high-level Scientific Advisory Committee composed of seasoned
-            experts in biotechnology, clinical diagnostics, and translational research. We bridge the gap
-            between global innovation and local implementation through a three-pillared scientific approach.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <PillarCard number="01" label="Technical Due Diligence" delay={0}>
-              We conduct rigorous evaluations of your instruments and kits to determine their clinical utility,
-              performance compatibility, and research relevance within the Indian laboratory infrastructure.
-            </PillarCard>
-            <PillarCard number="02" label="Infrastructure Synergy" delay={0.1}>
-              We identify and vet local distribution partners not just on their sales reach, but on their
-              technical capacity — ensuring they possess the cold-chain integrity, calibration expertise,
-              and biosafety standards your technology demands.
-            </PillarCard>
-            <PillarCard number="03" label="Strategic Market Alignment" delay={0.2}>
-              We provide high-level guidance on navigating the Indian regulatory landscape (CDSCO) and
-              aligning your product positioning with the priorities of India's top-tier research institutions
-              and healthcare providers.
-            </PillarCard>
-          </div>
-          <motion.div
-            className="mt-12 p-8 rounded-lg card-hover"
-            style={{ background: 'var(--bg3)', borderLeft: '2px solid var(--accent)' }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-base leading-relaxed" style={{ color: 'var(--muted-color)' }}>
-              The Indian biotech sector is sophisticated but fragmented. Success requires more than a distributor;
-              it requires a partner who speaks the language of the scientist. Our committee acts as your
-              "boots on the ground," providing the credibility and technical oversight needed to transform
-              a product launch into a long-term market standard.
-            </p>
-          </motion.div>
-          <div className="mt-8 text-center">
-            <Link to="/advisory" className="text-sm hover:underline" style={{ color: 'var(--accent)' }}>
-              Explore Our Full Advisory Model →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <section className="section-padding" style={{ background: 'var(--bg2)' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <SectionEyebrow>Our Services</SectionEyebrow>
-          <KineticTitle line1="PRECISION-ENGINEERED" line2="MARKET ENTRY." className="mb-6" />
-          <p className="max-w-3xl text-base leading-relaxed mb-12" style={{ color: 'var(--muted-color)' }}>
-            We provide a comprehensive suite of advisory services designed to navigate the technical,
-            regulatory, and commercial complexities of the Indian biotechnology sector.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <ServiceCard
-              number="01" tag="Matchmaking" title="Strategic Distributor Matchmaking" delay={0}
-              body="We don't just find agents; we identify technical partners. Our committee conducts a multi-tier vetting process to connect you with local distributors who possess the right capabilities."
-              bullets={[
-                'Proven technical infrastructure: verified cold-chain capabilities and ISO-certified storage',
-                'Specialized sales networks with existing relationships in Tier-1 research hospitals and government institutions',
-                'Demonstrated ability to provide after-sales calibration and engineering support for high-end instrumentation',
-              ]}
-            />
-            <ServiceCard
-              number="02" tag="Due Diligence" title="Technical & Clinical Due Diligence" delay={0.1} tagColor="var(--accent2)"
-              body="Before a single unit is shipped, we evaluate the Product-Market Fit within the Indian scientific landscape."
-              bullets={[
-                'Utility assessment: analyzing how your kits or instruments solve specific challenges in Indian clinical or research sectors',
-                'Protocol alignment: ensuring your technology meets local laboratory standards and SOPs',
-                'Competitive analysis: a scientific breakdown of the existing landscape to optimize your value proposition',
-              ]}
-            />
-            <ServiceCard
-              number="03" tag="Regulatory" title="Regulatory & Compliance Advisory" delay={0.2}
-              body="Navigating the Indian regulatory environment requires deep localized expertise. We provide high-level guidance across all compliance dimensions."
-              bullets={[
-                'CDSCO & DCGI pathways: advising on classification and registration requirements for diagnostic kits and medical devices',
-                'Import documentation: assisting with technical documentation required for smooth customs clearance',
-                'Quality standards: ensuring compliance with local biosafety and environmental regulations',
-              ]}
-            />
-            <ServiceCard
-              number="04" tag="KOL Engagement" title="Key Opinion Leader (KOL) Engagement" delay={0.3} tagColor="var(--gold)"
-              body="Building scientific credibility is essential for high-end biotech adoption. Our committee facilitates direct access to India's leading scientific voices."
-              bullets={[
-                "Scientific roundtables introducing your technology to India's leading scientists and clinicians",
-                'Validation studies: advising on pilot programs or multicenter evaluations within Indian institutions',
-                'Technical workshops overseeing scientific training of local partners to maintain brand excellence',
-              ]}
-            />
-          </div>
-          <div className="mt-8 text-center">
-            <Link to="/services" className="text-sm hover:underline" style={{ color: 'var(--accent)' }}>View All Services →</Link>
-          </div>
-        </div>
-      </section>
+      {/* ADVISORY & SERVICES sections removed — content lives on dedicated /advisory and /services pages */}
 
       {/* MARKETS */}
       <section className="section-padding">
@@ -325,6 +215,9 @@ export default function Home() {
           role="Market Entry Client"
         />
       </div>
+
+      {/* NEWSROOM TICKER */}
+      <NewsroomTicker />
 
       {/* JOIN CTA */}
       <section className="section-padding">

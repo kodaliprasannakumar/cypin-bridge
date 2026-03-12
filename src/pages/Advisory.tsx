@@ -16,7 +16,7 @@ export default function Advisory() {
       />
       <div className="section-padding pt-0">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             <PillarCard number="01" label="Technical Due Diligence" delay={0}>
               We conduct rigorous evaluations of your instruments and kits to determine their clinical utility,
               performance compatibility, and research relevance within the Indian laboratory infrastructure.
@@ -30,6 +30,10 @@ export default function Advisory() {
               We provide high-level guidance on navigating the Indian regulatory landscape (CDSCO) and
               aligning your product positioning with the priorities of India's top-tier research institutions
               and healthcare providers.
+            </PillarCard>
+            <PillarCard number="04" label="Commercial Strategy" delay={0.3}>
+              We analyze competitive landscapes, develop pricing strategies, and conduct margin assessments
+              to position your products effectively against established players in the Indian market.
             </PillarCard>
           </div>
           <div className="p-8 rounded-lg card-hover" style={{ background: 'var(--bg3)', borderLeft: '2px solid var(--accent)' }}>

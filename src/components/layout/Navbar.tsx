@@ -8,7 +8,6 @@ const navLinks = [
   { label: 'Advisory', to: '/advisory' },
   { label: 'Services', to: '/services' },
   { label: 'Markets', to: '/markets' },
-  { label: 'Careers', to: '/careers' },
   { label: 'Join Us', to: '/join' },
 ];
 
@@ -43,7 +42,7 @@ export default function Navbar() {
         style={{ background: 'rgb(6,8,13)', opacity: bgOpacity }}
       />
       <div className="relative h-[68px] max-w-7xl mx-auto px-5 flex items-center justify-between">
-        <Link to="/" className="font-heading text-xl font-normal tracking-wide" style={{ color: '#fff' }}>
+        <Link to="/" className="font-heading text-2xl md:text-3xl font-normal tracking-wide" style={{ color: '#fff' }}>
           Cypin<span style={{ color: 'var(--accent)' }}>.</span>Scientific
         </Link>
 

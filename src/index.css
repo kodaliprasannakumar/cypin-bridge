@@ -123,6 +123,15 @@
     to { transform: translateX(-50%); }
   }
 
+  .newsroom-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 45s linear infinite;
+  }
+  .newsroom-track:hover {
+    animation-play-state: paused;
+  }
+
   .diagonal-card {
     clip-path: polygon(0 0, 100% 0, 100% 92%, 94% 100%, 0 100%);
     transition: clip-path 0.4s ease, border-color 0.25s ease;
@@ -267,7 +276,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-bg,
   .mesh-gradient { animation: none !important; }
-  .marquee-track { animation: none !important; }
+  .marquee-track, .newsroom-track { animation: none !important; }
   .diagonal-card { transition: none !important; }
   * {
     animation-duration: 0.01ms !important;
